@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ucpfile" xmlns="http://openoffice.org/2010/uno-components">
+    prefix="ucpsecurity" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.ucb.SecurityProvider">
     <service name="com.sun.star.ucb.SecurityContentProvider"/>
   </implementation>

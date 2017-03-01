@@ -47,7 +47,7 @@ using namespace com::sun::star::container;
 #endif
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpsecurity_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = nullptr;
