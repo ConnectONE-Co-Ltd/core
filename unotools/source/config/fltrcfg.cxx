@@ -407,90 +407,130 @@ void SvtFilterOptions::Load()
 
 void SvtFilterOptions::SetLoadWordBasicCode( bool bFlag )
 {
+/*
     pImpl->SetFlag( FILTERCFG_WORD_CODE, bFlag );
     SetModified();
+*/
 }
 
 bool SvtFilterOptions::IsLoadWordBasicCode() const
 {
+/*
     return pImpl->IsFlag( FILTERCFG_WORD_CODE );
+*/
+    return false;
 }
 
 void SvtFilterOptions::SetLoadWordBasicExecutable( bool bFlag )
 {
+/*
     pImpl->SetFlag( FILTERCFG_WORD_WBCTBL, bFlag );
     SetModified();
+*/
 }
 
 bool SvtFilterOptions::IsLoadWordBasicExecutable() const
 {
+/*
     return pImpl->IsFlag( FILTERCFG_WORD_WBCTBL );
+*/
+    return false;
 }
 
 void SvtFilterOptions::SetLoadWordBasicStorage( bool bFlag )
 {
+/*
     pImpl->SetFlag( FILTERCFG_WORD_STORAGE, bFlag );
     SetModified();
+*/
 }
 
 bool SvtFilterOptions::IsLoadWordBasicStorage() const
 {
+/*
     return pImpl->IsFlag( FILTERCFG_WORD_STORAGE );
+*/
+    return false;
 }
 
 void SvtFilterOptions::SetLoadExcelBasicCode( bool bFlag )
 {
+/*
     pImpl->SetFlag( FILTERCFG_EXCEL_CODE, bFlag );
     SetModified();
+*/
 }
 
 bool SvtFilterOptions::IsLoadExcelBasicCode() const
 {
+/*
     return pImpl->IsFlag( FILTERCFG_EXCEL_CODE );
+*/
+    return false;
 }
 
 void SvtFilterOptions::SetLoadExcelBasicExecutable( bool bFlag )
 {
+/*
     pImpl->SetFlag( FILTERCFG_EXCEL_EXECTBL, bFlag );
     SetModified();
+*/
 }
 
 bool SvtFilterOptions::IsLoadExcelBasicExecutable() const
 {
+/*
     return pImpl->IsFlag( FILTERCFG_EXCEL_EXECTBL );
+*/
+    return false;
 }
 
 void SvtFilterOptions::SetLoadExcelBasicStorage( bool bFlag )
 {
+/*
     pImpl->SetFlag( FILTERCFG_EXCEL_STORAGE, bFlag );
     SetModified();
+*/
 }
 
 bool SvtFilterOptions::IsLoadExcelBasicStorage() const
 {
+/*
     return pImpl->IsFlag( FILTERCFG_EXCEL_STORAGE );
+*/
+    return false;
 }
 
 void SvtFilterOptions::SetLoadPPointBasicCode( bool bFlag )
 {
+/*
     pImpl->SetFlag( FILTERCFG_PPOINT_CODE, bFlag );
     SetModified();
+*/
 }
 
 bool SvtFilterOptions::IsLoadPPointBasicCode() const
 {
+/*
     return pImpl->IsFlag( FILTERCFG_PPOINT_CODE );
+*/
+    return false;
 }
 
 void SvtFilterOptions::SetLoadPPointBasicStorage( bool bFlag )
 {
+/*
     pImpl->SetFlag( FILTERCFG_PPOINT_STORAGE, bFlag );
     SetModified();
+*/
 }
 
 bool SvtFilterOptions::IsLoadPPointBasicStorage() const
 {
+/*
     return pImpl->IsFlag( FILTERCFG_PPOINT_STORAGE );
+*/
+    return false;
 }
 
 bool SvtFilterOptions::IsMathType2Math() const

@@ -601,6 +601,8 @@ SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& r
     m_pTSAURLsPB->SetClickHdl( LINK( this, SvxSecurityTabPage, TSAURLsPBHdl ) );
 
     ActivatePage( rSet );
+
+   m_pMacroSecPB->Enable(false);
 }
 
 SvxSecurityTabPage::~SvxSecurityTabPage()

@@ -52,6 +52,14 @@ OfaMSFilterTabPage::OfaMSFilterTabPage(vcl::Window* pParent, const SfxItemSet& r
 
     aWBasicCodeCB->SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl ) );
     aEBasicCodeCB->SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
+    aWBasicCodeCB->Enable(false);
+    aWBasicWbctblCB->Enable(false);
+    aWBasicStgCB->Enable(false);
+    aEBasicCodeCB->Enable(false);
+    aEBasicExectblCB->Enable(false);
+    aEBasicStgCB->Enable(false);
+    aPBasicCodeCB->Enable(false);
+    aPBasicStgCB->Enable(false);
 }
 
 OfaMSFilterTabPage::~OfaMSFilterTabPage()
