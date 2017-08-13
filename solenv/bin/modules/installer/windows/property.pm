@@ -279,7 +279,7 @@ sub set_important_properties
         my $onepropertyline = "DESKTOPLINKEXISTS" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $onepropertyline);
 
-        $onepropertyline = "CREATEDESKTOPLINK" . "\t" . "1" . "\n"; # Setting the default
+        $onepropertyline = "CREATEDESKTOPLINK" . "\t" . "0" . "\n"; # Setting the default
         push(@{$propertyfile}, $onepropertyline);
     }
 
