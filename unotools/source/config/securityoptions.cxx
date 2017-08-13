@@ -220,7 +220,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     ,m_bRecommendPwd(false)
     ,m_bCtrlClickHyperlink(false)
     ,m_bBlockUntrustedRefererLinks(false)
-    ,m_nSecLevel            ( 1                     )
+    ,m_nSecLevel            ( 3                     )
     ,m_seqTrustedAuthors    ( DEFAULT_TRUSTEDAUTHORS    )
     ,m_bDisableMacros       ( false                 )
     ,m_bROSecureURLs        ( CFG_READONLY_DEFAULT      )
@@ -351,8 +351,10 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
 
         case PROPERTYHANDLE_MACRO_SECLEVEL:
         {
+/*
             rValue >>= m_nSecLevel;
             m_bROSecLevel = bRO;
+*/
         }
         break;
 
@@ -842,6 +844,7 @@ inline bool SvtSecurityOptions_Impl::IsMacroDisabled() const
 
 void SvtSecurityOptions_Impl::SetMacroSecurityLevel( sal_Int32 _nLevel )
 {
+/*
     if( !m_bROSecLevel )
     {
         if( _nLevel > 3 || _nLevel < 0 )
@@ -853,6 +856,7 @@ void SvtSecurityOptions_Impl::SetMacroSecurityLevel( sal_Int32 _nLevel )
             SetModified();
         }
     }
+*/
 }
 
 
