@@ -2977,7 +2977,7 @@ shell::getScheme( OUString& Scheme )
 OUString SAL_CALL
 shell::getImplementationName_static()
 {
-  return OUString("com.sun.star.comp.ucb.FileProvider");
+  return OUString("com.sun.star.comp.ucb.SecurityProvider");
 }
 
 

@@ -590,6 +590,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	ucpchelp1 \
 	ucphier1 \
 	ucppkg1 \
+	ucpsecurity \
 	unopkgapp \
 	xmlsecurity \
 	xsec_fw \

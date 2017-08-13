@@ -101,6 +101,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	ucb/source/ucp/image/ucpimage \
 	ucb/source/ucp/package/ucppkg1 \
 	ucb/source/ucp/tdoc/ucptdoc1 \
+	ucb/source/ucp/security/ucpsecurity \
 	UnoControls/util/ctl \
 	unotools/util/utl \
 	unoxml/source/rdf/unordf \
