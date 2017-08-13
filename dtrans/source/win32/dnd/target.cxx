@@ -121,6 +121,7 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
     // identical we need to create a new thread as we do when the calling thread is
     // an MTA thread.
 
+    /*
     if( aArguments.getLength() > 0)
     {
         // Get the window handle from aArgument. It is needed for RegisterDragDrop.
@@ -185,6 +186,7 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
             throw Exception();
 
     }
+    */
 }
 
 // This function is called as extra thread from DragSource::startDrag.

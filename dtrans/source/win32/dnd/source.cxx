@@ -172,6 +172,7 @@ void SAL_CALL DragSource::startDrag(
     // Allow only one running dnd operation at a time,
     // see XDragSource documentation
 
+#if 0
     long cnt = InterlockedIncrement(&m_RunningDndOperationCount);
 
     if (1 == cnt)
@@ -181,6 +182,7 @@ void SAL_CALL DragSource::startDrag(
     else
     {
         cnt = InterlockedDecrement(&m_RunningDndOperationCount);
+#endif
 
         DragSourceDropEvent dsde;
 
@@ -195,7 +197,9 @@ void SAL_CALL DragSource::startDrag(
         {
             OSL_FAIL("Runtime exception during event dispatching");
         }
+#if 0
     }
+#endif
 }
 
 /** IDropTarget */
