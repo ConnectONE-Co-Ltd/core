@@ -18,12 +18,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!--
  <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Open"/>
  <toolbar:toolbaritem xlink:href=".uno:Save"/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Print"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintPreview" toolbar:visible="false"/>
+-->
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Undo"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>

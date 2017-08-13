@@ -15,11 +15,13 @@
   <menu:menuitem menu:id=".uno:Crop"/>
   <menu:menuitem menu:id=".uno:OriginalSize"/>
   <menu:menuseparator/>
+<!--
   <menu:menuitem menu:id=".uno:ExternalEdit"/>
   <menu:menuitem menu:id=".uno:ChangePicture"/>
   <menu:menuitem menu:id=".uno:CompressGraphic"/>
   <menu:menuitem menu:id=".uno:SaveGraphic"/>
   <menu:menuseparator/>
+-->
   <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuseparator/>
