@@ -505,8 +505,10 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 
     try
     {
+/*
         Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get( xContext );
         rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+*/
     }
     catch( const Exception& )
     {
