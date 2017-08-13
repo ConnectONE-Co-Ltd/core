@@ -19,14 +19,17 @@
 <menu:menubar xmlns:menu="http://openoffice.org/2001/menu" menu:id="menubar">
     <menu:menu menu:id=".uno:PickList" >
         <menu:menupopup>
+<!--
             <menu:menuitem menu:id=".uno:AddDirect"/>
             <menu:menuitem menu:id=".uno:Open"/>
             <menu:menuitem menu:id=".uno:RecentFileList"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
             <menu:menuseparator/>
+-->
             <menu:menuitem menu:id=".uno:CloseDoc"/>
             <menu:menuitem menu:id=".uno:Save"/>
+<!--
             <menu:menuitem menu:id=".uno:SaveAs"/>
             <menu:menuitem menu:id=".uno:SaveAll"/>
             <menu:menuseparator/>
@@ -37,6 +40,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+-->
             <menu:menuitem menu:id=".uno:Quit"/>
         </menu:menupopup>
     </menu:menu>
