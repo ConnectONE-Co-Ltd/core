@@ -98,7 +98,8 @@ css::uno::Any NamedValueByNameAccess::getValue(const sal_Char * pName)
 bool
 UpdateCheckROModel::isAutoCheckEnabled() const
 {
-    return m_aNameAccess.getValue(AUTOCHECK_ENABLED).get<bool>();
+    // return m_aNameAccess.getValue(AUTOCHECK_ENABLED).get<bool>();
+    return false;
 }
 
 bool
@@ -254,7 +255,7 @@ bool
 UpdateCheckConfig::isAutoCheckEnabled() const
 {
     bool nValue = false;
-    const_cast < UpdateCheckConfig *> (this)->getByName( AUTOCHECK_ENABLED ) >>= nValue;
+    // const_cast < UpdateCheckConfig *> (this)->getByName( AUTOCHECK_ENABLED ) >>= nValue;
     return nValue;
 }
 
@@ -262,7 +263,7 @@ bool
 UpdateCheckConfig::isAutoDownloadEnabled() const
 {
     bool nValue = false;
-    const_cast < UpdateCheckConfig *> (this)->getByName( AUTODOWNLOAD_ENABLED ) >>= nValue;
+    // const_cast < UpdateCheckConfig *> (this)->getByName( AUTODOWNLOAD_ENABLED ) >>= nValue;
     return nValue;
 }
 
