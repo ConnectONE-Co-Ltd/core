@@ -826,9 +826,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
+/*
             ScopedVclPtrInstance<SfxSaveAsTemplateDialog> aDlg;
             aDlg->setDocumentModel(GetModel());
             aDlg->Execute();
+*/
             break;
         }
 
