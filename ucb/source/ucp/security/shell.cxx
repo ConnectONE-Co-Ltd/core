@@ -69,6 +69,12 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
+static OUString securityToFileScheme(const OUString &securityURL)
+{
+    return securityURL.replaceFirst("vnd.connectone.security:", "file:");
+}
+
+
 shell::UnqPathData::UnqPathData()
     : properties( nullptr ),
       notifier( nullptr ),
@@ -1913,7 +1919,7 @@ bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
         return false;
     }
 
-    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Url,Unq );
+    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( securityToFileScheme(Url),Unq );
 
     Unq = Url;
 
@@ -1928,7 +1934,7 @@ bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
 
 bool SAL_CALL shell::getUrlFromUnq( const OUString& Unq,OUString& Url )
 {
-    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
+    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( securityToFileScheme(Unq),Url );
 
     Url = Unq;
 

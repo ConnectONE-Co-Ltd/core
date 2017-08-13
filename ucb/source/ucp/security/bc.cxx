@@ -91,6 +91,7 @@ BaseContent::BaseContent( shell* pMyShell,
       m_pPropertySetInfoChangeListeners( nullptr ),
       m_pPropertyListener( nullptr )
 {
+    m_aUncPath = m_aUncPath.replaceFirst("vnd.connectone.security:", "file:");
     m_pMyShell->m_pProvider->acquire();
     // No registering, since we have no name
 }
@@ -111,6 +112,7 @@ BaseContent::BaseContent( shell* pMyShell,
       m_pPropertySetInfoChangeListeners( nullptr ),
       m_pPropertyListener( nullptr )
 {
+    m_aUncPath = m_aUncPath.replaceFirst("vnd.connectone.security:", "file:");
     m_pMyShell->m_pProvider->acquire();
     m_pMyShell->registerNotifier( m_aUncPath,this );
     m_pMyShell->insertDefaultProperties( m_aUncPath );
