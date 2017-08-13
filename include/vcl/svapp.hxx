@@ -1587,6 +1587,11 @@ inline void Application::EndYield()
     PostUserEvent( Link<void*,void>() );
 }
 
+VCL_DLLPUBLIC void SetSecretKey( OUString& secretkey );
+VCL_DLLPUBLIC OUString& GetSecretKey();
+VCL_DLLPUBLIC void SetInitialVector( OUString& initialvector );
+VCL_DLLPUBLIC OUString& GetInitialVector();
+
 #endif // _APP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

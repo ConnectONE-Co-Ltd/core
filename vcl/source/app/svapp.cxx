@@ -1774,4 +1774,27 @@ void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {
     pSVData->maAppData.mbInAppMain = true;
 }
 
+static OUString g_secretkey = OUString::createFromAscii("");
+static OUString g_initialvector = OUString::createFromAscii("");
+
+VCL_DLLPUBLIC void SetSecretKey( OUString& secretkey )
+{
+    g_secretkey = secretkey;
+}
+
+VCL_DLLPUBLIC OUString& GetSecretKey()
+{
+    return g_secretkey;
+}
+
+VCL_DLLPUBLIC void SetInitialVector( OUString& initialvector )
+{
+    g_initialvector = initialvector;
+}
+
+VCL_DLLPUBLIC OUString& GetInitialVector()
+{
+    return g_initialvector;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
