@@ -288,7 +288,9 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         if (has_jump_mark(preprocessed_command) && !is_existing_file(preprocessed_command))
             remove_jump_mark(&preprocessed_command);
     }
+*/
     /* Convert file uris to system paths */
+/*
     else
     {
         OUString aSystemPath;
