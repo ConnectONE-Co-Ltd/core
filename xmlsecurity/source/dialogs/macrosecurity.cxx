@@ -166,6 +166,10 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(vcl::Window* _pParent, MacroSecurity*
         m_pMediumRB->Enable(false);
         m_pLowRB->Enable(false);
     }
+    m_pVeryHighRB->Enable(false);
+    m_pHighRB->Enable(false);
+    m_pMediumRB->Enable(false);
+    m_pLowRB->Enable(false);
 }
 
 MacroSecurityLevelTP::~MacroSecurityLevelTP()
