@@ -182,7 +182,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
         EVP_CIPHER_CTX m_aCipher;
         unsigned char* m_pDecrypted;
-        long m_nDecryptedLength;
+        sal_Int64 m_nDecryptedLength;
 
         std::vector<unsigned char>* m_pEncrypted;
 

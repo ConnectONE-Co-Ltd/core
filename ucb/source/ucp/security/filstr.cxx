@@ -153,7 +153,7 @@ XStream_impl::readBytes(
         throw io::BufferSizeExceededException( THROW_WHERE );
     }
 
-    long pos = getPosition();
+    sal_Int64 pos = getPosition();
     if (!m_pDecrypted) {
         if (GetInitialVector().getLength() != 32) {
             OSL_FAIL("invalid initialvector size");
@@ -162,26 +162,28 @@ XStream_impl::readBytes(
         unsigned char iv[16];
         const char* utf8 = GetInitialVector().toUtf8().getStr();
         for (int i=0; i<16; i++) {
-            if ('0' <= utf8[i] && utf8[i] <= '9') {
-                iv[i] = (unsigned char) ((utf8[i] - '0') << 4);
-            } else if ('a' <= utf8[i] && utf8[i] <= 'z') {
-                iv[i] = (unsigned char) ((utf8[i] - 'a' + 10) << 4);
-            } else if ('A' <= utf8[i] && utf8[i] <= 'Z') {
-                iv[i] = (unsigned char) ((utf8[i] - 'A' + 10) << 4);
+            if ('0' <= *utf8 && *utf8 <= '9') {
+                iv[i] = (unsigned char) ((*utf8 - '0') << 4);
+            } else if ('a' <= *utf8 && *utf8 <= 'z') {
+                iv[i] = (unsigned char) ((*utf8 - 'a' + 10) << 4);
+            } else if ('A' <= *utf8 && *utf8 <= 'Z') {
+                iv[i] = (unsigned char) ((*utf8 - 'A' + 10) << 4);
             } else {
                 OSL_FAIL("invalid initialvector");
                 throw io::IOException( THROW_WHERE );
             }
-            if ('0' <= utf8[i] && utf8[i] <= '9') {
-                iv[i] |= (unsigned char) (utf8[i] - '0');
-            } else if ('a' <= utf8[i] && utf8[i] <= 'z') {
-                iv[i] |= (unsigned char) (utf8[i] - 'a' + 10);
-            } else if ('A' <= utf8[i] && utf8[i] <= 'Z') {
-                iv[i] |= (unsigned char) (utf8[i] - 'A' + 10);
+            utf8++;
+            if ('0' <= *utf8 && *utf8 <= '9') {
+                iv[i] |= (unsigned char) (*utf8 - '0');
+            } else if ('a' <= *utf8 && *utf8 <= 'z') {
+                iv[i] |= (unsigned char) (*utf8 - 'a' + 10);
+            } else if ('A' <= *utf8 && *utf8 <= 'Z') {
+                iv[i] |= (unsigned char) (*utf8 - 'A' + 10);
             } else {
                 OSL_FAIL("invalid initialvector");
                 throw io::IOException( THROW_WHERE );
             }
+            utf8++;
         }
         const char* key = GetSecretKey().toUtf8().getStr();
         if (strlen(key) != 16) {
@@ -192,7 +194,7 @@ XStream_impl::readBytes(
             throw io::IOException( THROW_WHERE );
         }
         m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( 0 ) );
-        long len = getLength();
+        sal_Int64 len = getLength();
         try {
             m_pDecrypted = new unsigned char[len + 16];
         } catch (const std::bad_alloc&) {
@@ -227,12 +229,14 @@ XStream_impl::readBytes(
         aData = uno::Sequence< sal_Int8 > ( (sal_Int8*) buffer.get(), (sal_uInt32) nBytesToRead );
         m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( pos + nBytesToRead ) );
         return nBytesToRead;
-    } else {
-        long len = m_nDecryptedLength - pos;
+    } else if (pos < m_nDecryptedLength) {
+        sal_Int64 len = m_nDecryptedLength - pos;
         memcpy(buffer.get(), m_pDecrypted + pos, len);
         aData = uno::Sequence< sal_Int8 > ( (sal_Int8*) buffer.get(), (sal_uInt32) len );
         m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( pos + len ) );
         return len;
+    } else {
+        return 0;
     }
 }
 
@@ -278,7 +282,7 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
            io::IOException,
            uno::RuntimeException, std::exception)
 {
-    long length = aData.getLength();
+    sal_Int64 length = aData.getLength();
     if(length)
     {
         if (!m_pEncrypted) {
@@ -289,26 +293,28 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
             unsigned char iv[16];
             const char* utf8 = GetInitialVector().toUtf8().getStr();
             for (int i=0; i<16; i++) {
-                if ('0' <= utf8[i] && utf8[i] <= '9') {
-                    iv[i] = (unsigned char) ((utf8[i] - '0') << 4);
-                } else if ('a' <= utf8[i] && utf8[i] <= 'z') {
-                    iv[i] = (unsigned char) ((utf8[i] - 'a' + 10) << 4);
-                } else if ('A' <= utf8[i] && utf8[i] <= 'Z') {
-                    iv[i] = (unsigned char) ((utf8[i] - 'A' + 10) << 4);
+                if ('0' <= *utf8 && *utf8 <= '9') {
+                    iv[i] = (unsigned char) ((*utf8 - '0') << 4);
+                } else if ('a' <= *utf8 && *utf8 <= 'z') {
+                    iv[i] = (unsigned char) ((*utf8 - 'a' + 10) << 4);
+                } else if ('A' <= *utf8 && *utf8 <= 'Z') {
+                    iv[i] = (unsigned char) ((*utf8 - 'A' + 10) << 4);
                 } else {
                     OSL_FAIL("invalid initialvector");
                     throw io::IOException( THROW_WHERE );
                 }
-                if ('0' <= utf8[i] && utf8[i] <= '9') {
-                    iv[i] |= (unsigned char) (utf8[i] - '0');
-                } else if ('a' <= utf8[i] && utf8[i] <= 'z') {
-                    iv[i] |= (unsigned char) (utf8[i] - 'a' + 10);
-                } else if ('A' <= utf8[i] && utf8[i] <= 'Z') {
-                    iv[i] |= (unsigned char) (utf8[i] - 'A' + 10);
+                utf8++;
+                if ('0' <= *utf8 && *utf8 <= '9') {
+                    iv[i] |= (unsigned char) (*utf8 - '0');
+                } else if ('a' <= *utf8 && *utf8 <= 'z') {
+                    iv[i] |= (unsigned char) (*utf8 - 'a' + 10);
+                } else if ('A' <= *utf8 && *utf8 <= 'Z') {
+                    iv[i] |= (unsigned char) (*utf8 - 'A' + 10);
                 } else {
                     OSL_FAIL("invalid initialvector");
                     throw io::IOException( THROW_WHERE );
                 }
+                utf8++;
             }
             const char* key = GetSecretKey().toUtf8().getStr();
             if (strlen(key) != 16) {
@@ -324,7 +330,7 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
         do {
             unsigned char encrypted[16];
             int outl = 0;
-            if (!EVP_EncryptUpdate(&m_aCipher, encrypted, &outl, (const unsigned char *) p, std::min((long)16,length)))
+            if (!EVP_EncryptUpdate(&m_aCipher, encrypted, &outl, (const unsigned char *) p, std::min((sal_Int64)16,length)))
                 throw io::IOException( THROW_WHERE );
             m_pEncrypted->insert(m_pEncrypted->end(), encrypted, encrypted + outl);
             length -= 16;
