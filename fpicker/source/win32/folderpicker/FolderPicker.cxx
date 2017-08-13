@@ -21,6 +21,7 @@
 
 #include "FolderPicker.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include "WinFOPImpl.hxx"
 
 using com::sun::star::uno::Reference;
@@ -91,7 +92,7 @@ void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) thro
 sal_Int16 SAL_CALL CFolderPicker::execute( )
     throw( RuntimeException )
 {
-    return RET_CANCEL;
+    return ExecutableDialogResults::CANCEL;
 /*
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
 

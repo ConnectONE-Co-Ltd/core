@@ -117,7 +117,7 @@ void SAL_CALL SalAquaFilePicker::setTitle( const rtl::OUString& aTitle ) throw( 
 
 sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 {
-    return RET_CANCEL;
+    return ExecutableDialogResults::CANCEL;
 /*
     SolarMutexGuard aGuard;
 

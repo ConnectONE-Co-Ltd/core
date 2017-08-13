@@ -76,7 +76,7 @@ void SAL_CALL SalAquaFolderPicker::setTitle( const rtl::OUString& aTitle ) throw
 
 sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
 {
-    return RET_CANCEL;
+    return ExecutableDialogResults::CANCEL;
 /*
     SolarMutexGuard aGuard;
 
