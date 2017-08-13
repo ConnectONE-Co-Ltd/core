@@ -927,6 +927,7 @@ short RecoveryDialog::execute()
 
     switch (m_eRecoveryState)
     {
+        case RecoveryDialog::E_RECOVERY_PREPARED :
         case RecoveryDialog::E_RECOVERY_IN_PROGRESS :
              {
                 // user decided to start recovery ...
@@ -937,6 +938,7 @@ short RecoveryDialog::execute()
                 m_pNextBtn->Enable(false);
                 m_pCancelBtn->Enable(false);
                 m_pCore->setProgressHandler(m_xProgress);
+/*
                 m_pCore->setUpdateListener(this);
                 m_pCore->doRecovery();
 
@@ -945,6 +947,8 @@ short RecoveryDialog::execute()
                     Application::Yield();
 
                 m_pCore->setUpdateListener(nullptr);
+*/
+                m_pCore->forgetAllRecoveryEntries();
                 m_eRecoveryState = RecoveryDialog::E_RECOVERY_CORE_DONE;
                 return execute();
              }

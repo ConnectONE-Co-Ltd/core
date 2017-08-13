@@ -260,7 +260,10 @@ bool RecoveryUI::impl_doRecovery()
     ScopedVclPtrInstance<svxdr::RecoveryDialog> xDialog(m_pParentWindow, pCore);
 
     // start the dialog
+/*
     short nRet = xDialog->Execute();
+*/
+    short nRet = xDialog->execute();
 
     impl_showAllRecoveredDocs();
 
