@@ -500,7 +500,10 @@ void SAL_CALL SvtFilePicker::setTitle( const OUString& _rTitle ) throw (RuntimeE
 
 sal_Int16 SAL_CALL SvtFilePicker::execute(  ) throw (RuntimeException, std::exception)
 {
+    return RET_CANCEL;
+/*
     return OCommonPicker::execute();
+*/
 }
 
 

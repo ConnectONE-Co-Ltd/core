@@ -313,6 +313,8 @@ uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::R
 
 sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
 {
+    return RET_CANCEL;
+/*
     OSL_ASSERT(nullptr != m_pImpl.get());
 
     sal_Int16 ret;
@@ -337,6 +339,7 @@ sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
     }
 
     return ret;
+*/
 }
 
 void SAL_CALL CFilePicker::setValue(sal_Int16 aControlId, sal_Int16 aControlAction, const uno::Any& aValue)
