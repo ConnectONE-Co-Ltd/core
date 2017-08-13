@@ -19,6 +19,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILSTR_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FILE_FILSTR_HXX
 
+#include <vector>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -182,6 +183,8 @@ class XStream_impl :  public cppu::WeakImplHelper<
         EVP_CIPHER_CTX m_aCipher;
         unsigned char* m_pDecrypted;
         long m_nDecryptedLength;
+
+        std::vector<unsigned char>* m_pEncrypted;
 
         // Implementation methods
 

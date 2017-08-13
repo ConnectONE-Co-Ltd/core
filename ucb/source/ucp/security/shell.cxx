@@ -1959,7 +1959,31 @@ shell::copy_recursive( const OUString& srcUnqPath,
 
     if( TypeToCopy == FileUrlType::File ) // Document
     {
-        err = osl_File_copy( srcUnqPath,dstUnqPath,testExistBeforeCopy );
+        // err = osl_File_copy( srcUnqPath,dstUnqPath,testExistBeforeCopy );
+        // if( err != osl::FileBase::E_None )
+        //     return err;
+
+        XInputStream_impl srcStream( srcUnqPath, false );  // from filstr.hxx
+
+        sal_Int32 ErrorCode = srcStream.CtorSuccess();
+
+        if( ErrorCode != TASKHANDLER_NO_ERROR )
+        {
+            return osl::FileBase::E_INTR;
+        }
+
+        XStream_impl dstStream( dstUnqPath, false );  // from filstr.hxx
+
+        ErrorCode = dstStream.CtorSuccess();
+
+        if( ErrorCode != TASKHANDLER_NO_ERROR )
+        {
+            return osl::FileBase::E_INTR;
+        }
+
+        uno::Sequence< sal_Int8 > data(srcStream.getLength());
+        srcStream.readBytes(data, data.getLength());
+        dstStream.writeBytes(data);
     }
     else if( TypeToCopy == FileUrlType::Folder )
     {

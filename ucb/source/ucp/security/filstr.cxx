@@ -54,6 +54,8 @@ XStream_impl::XStream_impl( const OUString& aUncPath, bool bLock )
         nFlags |= osl_File_OpenFlag_NoLock;
 
     osl::FileBase::RC err = m_aFile.open( nFlags );
+    if (err == osl::FileBase::E_NOENT)
+        err = m_aFile.open( nFlags | osl_File_OpenFlag_Create );
     if(  err != osl::FileBase::E_None )
     {
         m_nIsOpen = false;
@@ -67,6 +69,7 @@ XStream_impl::XStream_impl( const OUString& aUncPath, bool bLock )
     EVP_CIPHER_CTX_init(&m_aCipher);
     m_pDecrypted = 0;
     m_nDecryptedLength = 0;
+    m_pEncrypted = 0;
 }
 
 
@@ -198,14 +201,14 @@ XStream_impl::readBytes(
         }
         do {
             sal_uInt64 nrc(0);
-            unsigned char* encrypted[16];
+            unsigned char encrypted[16];
             if (m_aFile.read( encrypted, 16, nrc ) != osl::FileBase::E_None)
             {
                 throw io::IOException( THROW_WHERE );
             }
 
             int outl(0);
-            if (!EVP_DecryptUpdate(&m_aCipher, m_pDecrypted + m_nDecryptedLength, &outl, (unsigned char*) encrypted, nrc)) {
+            if (!EVP_DecryptUpdate(&m_aCipher, m_pDecrypted + m_nDecryptedLength, &outl, encrypted, nrc)) {
                  throw io::IOException( THROW_WHERE );
             }
             len -= nrc;
@@ -275,14 +278,58 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
            io::IOException,
            uno::RuntimeException, std::exception)
 {
-    sal_uInt32 length = aData.getLength();
+    long length = aData.getLength();
     if(length)
     {
-        sal_uInt64 nWrittenBytes(0);
+        if (!m_pEncrypted) {
+            if (GetInitialVector().getLength() != 32) {
+                OSL_FAIL("invalid initialvector size");
+                throw io::IOException( THROW_WHERE );
+            }
+            unsigned char iv[16];
+            const char* utf8 = GetInitialVector().toUtf8().getStr();
+            for (int i=0; i<16; i++) {
+                if ('0' <= utf8[i] && utf8[i] <= '9') {
+                    iv[i] = (unsigned char) ((utf8[i] - '0') << 4);
+                } else if ('a' <= utf8[i] && utf8[i] <= 'z') {
+                    iv[i] = (unsigned char) ((utf8[i] - 'a' + 10) << 4);
+                } else if ('A' <= utf8[i] && utf8[i] <= 'Z') {
+                    iv[i] = (unsigned char) ((utf8[i] - 'A' + 10) << 4);
+                } else {
+                    OSL_FAIL("invalid initialvector");
+                    throw io::IOException( THROW_WHERE );
+                }
+                if ('0' <= utf8[i] && utf8[i] <= '9') {
+                    iv[i] |= (unsigned char) (utf8[i] - '0');
+                } else if ('a' <= utf8[i] && utf8[i] <= 'z') {
+                    iv[i] |= (unsigned char) (utf8[i] - 'a' + 10);
+                } else if ('A' <= utf8[i] && utf8[i] <= 'Z') {
+                    iv[i] |= (unsigned char) (utf8[i] - 'A' + 10);
+                } else {
+                    OSL_FAIL("invalid initialvector");
+                    throw io::IOException( THROW_WHERE );
+                }
+            }
+            const char* key = GetSecretKey().toUtf8().getStr();
+            if (strlen(key) != 16) {
+                OSL_FAIL("invalid secretkey size");
+                throw io::IOException( THROW_WHERE );
+            }
+            if (!EVP_EncryptInit_ex(&m_aCipher, EVP_aes_128_cbc(), NULL, (const unsigned char*) key, iv)) {
+                throw io::IOException( THROW_WHERE );
+            }
+            m_pEncrypted = new std::vector<unsigned char>();
+        }
         const sal_Int8* p = aData.getConstArray();
-        if(osl::FileBase::E_None != m_aFile.write((static_cast<void const *>(p)),sal_uInt64(length),nWrittenBytes) ||
-           nWrittenBytes != length )
-            throw io::IOException( THROW_WHERE );
+        do {
+            unsigned char encrypted[16];
+            int outl = 0;
+            if (!EVP_EncryptUpdate(&m_aCipher, encrypted, &outl, (const unsigned char *) p, std::min((long)16,length)))
+                throw io::IOException( THROW_WHERE );
+            m_pEncrypted->insert(m_pEncrypted->end(), encrypted, encrypted + outl);
+            length -= 16;
+            p += 16;
+        } while (0 < length);
     }
 }
 
@@ -295,6 +342,18 @@ XStream_impl::closeStream()
 {
     if( m_nIsOpen )
     {
+        if (m_pEncrypted) {
+            unsigned char encrypted[16];
+            int last = 0;
+            if (!EVP_EncryptFinal_ex(&m_aCipher, encrypted, &last))
+                throw io::IOException( THROW_WHERE );
+            m_pEncrypted->insert(m_pEncrypted->end(), encrypted, encrypted + last);
+            m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( 0 ) );
+            sal_uInt64 nWrittenBytes(0);
+            if(osl::FileBase::E_None != m_aFile.write((static_cast<void const *>(m_pEncrypted->data())),sal_uInt64(m_pEncrypted->size()),nWrittenBytes))
+                throw io::IOException( THROW_WHERE );
+            delete m_pEncrypted;
+        }
         osl::FileBase::RC err = m_aFile.close();
 
         if( err != osl::FileBase::E_None ) {
