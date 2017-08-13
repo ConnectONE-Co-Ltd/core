@@ -32,6 +32,20 @@
 #include <brdwin.hxx>
 #include <window.h>
 
+#include <vcl/window.hxx>
+
+static void WindowEventHandler(void*, VclWindowEvent& rEvent) {
+    switch (rEvent.GetId()) {
+        case VCLEVENT_WINDOW_DEACTIVATE:
+            printf("VCLEVENT_WINDOW_DEACTIVATE\n");
+            break;
+        default:
+            break;
+    }
+}
+
+static Link<VclWindowEvent&,void> g_aEventListenerLink( nullptr, WindowEventHandler );
+
 void WorkWindow::ImplInitWorkWindowData()
 {
     mnIcon                  = 0; // Should be removed in the next top level update - now in SystemWindow
@@ -65,6 +79,7 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentDat
     }
 
     SetActivateMode( ActivateModeFlags::GrabFocus );
+    AddEventListener(g_aEventListenerLink);
 }
 
 void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const css::uno::Any& aSystemWorkWindowToken )
