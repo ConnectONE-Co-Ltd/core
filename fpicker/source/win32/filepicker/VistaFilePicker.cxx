@@ -53,6 +53,8 @@
 #pragma warning (pop)
 #endif
 
+using namespace com::sun::star::ui::dialogs;
+
 namespace fpicker{
 namespace win32{
 namespace vista{
@@ -249,7 +251,7 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
 ::sal_Int16 SAL_CALL VistaFilePicker::execute()
     throw(css::uno::RuntimeException)
 {
-    return RET_CANCEL;
+    return ExecutableDialogResults::CANCEL;
 /*
     bool bInitialized(false);
     {

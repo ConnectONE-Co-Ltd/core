@@ -29,6 +29,7 @@
 #include "FPServiceInfo.hxx"
 #include "../misc/WinImplHelper.hxx"
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include "filepickereventnotification.hxx"
 
 #include <comphelper/sequence.hxx>
@@ -313,7 +314,7 @@ uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::R
 
 sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
 {
-    return RET_CANCEL;
+    return ExecutableDialogResults::CANCEL;
 /*
     OSL_ASSERT(nullptr != m_pImpl.get());
 

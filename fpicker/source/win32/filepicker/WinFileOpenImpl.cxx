@@ -155,6 +155,8 @@ uno::Sequence<OUString> SAL_CALL CWinFileOpenImpl::getFiles()
 
 sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
 {
+    return css::ui::dialogs::ExecutableDialogResults::CANCEL;
+/*
     sal_Int16 rc = CFileOpenDialog::doModal();
 
     if (1 == rc)
@@ -167,6 +169,7 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
             static_cast<XFilePicker2*>(m_FilePicker));
 
     return rc;
+*/
 }
 
 // appends a new filter
