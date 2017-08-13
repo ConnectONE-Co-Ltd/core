@@ -144,7 +144,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		dtrans/util/sysdtrans \
 		fpicker/source/win32/fps \
 		shell/source/backends/wininetbe/wininetbe1 \
-		shell/source/win32/simplemail/smplmail \
 		shell/source/win32/syssh \
 		vcl/vcl.windows \
 	) \
@@ -308,9 +307,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/scanner/scn \
 	extensions/source/update/feed/updatefeed \
 	xmlhelp/util/ucpchelp1 \
-	$(if $(filter-out WNT,$(OS)),\
-		shell/source/cmdmail/cmdmail \
-	) \
 	$(if $(filter-out WNT,$(OS)),\
 		shell/source/unix/exec/syssh \
 	) \

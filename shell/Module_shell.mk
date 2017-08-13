@@ -47,7 +47,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_regsvrex \
 	Executable_senddoc \
-	Library_smplmail \
 	Library_wininetbe \
 	StaticLibrary_simplemapi \
 ))
@@ -112,7 +111,6 @@ ifneq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_uri_encode \
-	Library_cmdmail \
 	Package_senddoc \
 ))
 
