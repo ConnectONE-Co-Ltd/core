@@ -246,6 +246,7 @@ CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext
 void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
         throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
+/*
     // parameter checking
     if (0 == aCommand.getLength())
         throw IllegalArgumentException(
@@ -323,6 +324,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             static_cast< XSystemShellExecute* >(this),
             psxErr);
     }
+*/
 }
 
 // XServiceInfo
