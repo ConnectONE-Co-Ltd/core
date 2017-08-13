@@ -50,7 +50,10 @@ void SAL_CALL SvtFolderPicker::setTitle( const OUString& _rTitle ) throw (Runtim
 
 sal_Int16 SAL_CALL SvtFolderPicker::execute(  ) throw (RuntimeException, std::exception)
 {
+    return RET_CANCEL;
+/*
     return OCommonPicker::execute();
+*/
 }
 
 void SAL_CALL SvtFolderPicker::setDialogTitle( const OUString& _rTitle) throw (RuntimeException, std::exception)

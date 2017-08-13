@@ -91,6 +91,8 @@ void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) thro
 sal_Int16 SAL_CALL CFolderPicker::execute( )
     throw( RuntimeException )
 {
+    return RET_CANCEL;
+/*
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
 
     // we should not block in this call else
@@ -98,6 +100,7 @@ sal_Int16 SAL_CALL CFolderPicker::execute( )
     // call another function an we run into a
     // deadlock !!!!!
     return m_pFolderPickerImpl->execute( );
+*/
 }
 
 // XServiceInfo

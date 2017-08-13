@@ -258,6 +258,8 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
 
 void VistaFilePicker::ensureInit()
 {
+    return RET_CANCEL;
+/*
     bool bInitialized(false);
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -291,6 +293,7 @@ void VistaFilePicker::ensureInit()
     if (bOK)
         nResult = css::ui::dialogs::ExecutableDialogResults::OK;
     return nResult;
+*/
 }
 
 // XFilePicker
