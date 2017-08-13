@@ -19,6 +19,7 @@
 <menu:menubar xmlns:menu="http://openoffice.org/2001/menu" menu:id="menubar">
   <menu:menu menu:id=".uno:PickList">
     <menu:menupopup>
+<!--
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:Open"/>
       <menu:menuitem menu:id=".uno:RecentFileList"/>
@@ -34,15 +35,19 @@
           </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
+-->
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuitem menu:id=".uno:Save"/>
+<!--
       <menu:menuitem menu:id=".uno:SaveAs"/>
       <menu:menuitem menu:id=".uno:SaveAll"/>
+-->
       <menu:menuitem menu:id=".uno:CheckOut"/>
       <menu:menuitem menu:id=".uno:CancelCheckOut"/>
       <menu:menuitem menu:id=".uno:CheckIn"/>
       <menu:menuitem menu:id=".uno:Reload"/>
       <menu:menuseparator/>
+<!--
       <menu:menuitem menu:id=".uno:ExportTo"/>
       <menu:menu menu:id=".uno:SendToMenu">
         <menu:menupopup>
@@ -52,14 +57,17 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
+-->
       <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
       <menu:menuseparator/>
+<!--
       <menu:menuitem menu:id=".uno:WebHtml"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PrintPreview"/>
       <menu:menuitem menu:id=".uno:Print"/>
       <menu:menuitem menu:id=".uno:PrinterSetup"/>
       <menu:menuseparator/>
+-->
       <menu:menuitem menu:id=".uno:Quit"/>
     </menu:menupopup>
   </menu:menu>
