@@ -9,8 +9,8 @@
             <menu:menuseparator/>
 -->
             <menu:menuitem menu:id=".uno:CloseWin"/>
-            <menu:menuitem menu:id=".uno:Save"/>
 <!--
+            <menu:menuitem menu:id=".uno:Save"/>
             <menu:menuitem menu:id=".uno:SaveAs"/>
             <menu:menuitem menu:id=".uno:SaveAll"/>
 -->

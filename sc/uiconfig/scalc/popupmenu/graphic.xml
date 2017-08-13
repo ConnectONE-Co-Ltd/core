@@ -66,11 +66,13 @@
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menu menu:id=".uno:FormatImageMenu">
     <menu:menupopup>
+<!--
       <menu:menuitem menu:id=".uno:ChangePicture"/>
       <menu:menuitem menu:id=".uno:SaveGraphic"/>
       <menu:menuitem menu:id=".uno:CompressGraphic"/>
       <menu:menuitem menu:id=".uno:ExternalEdit"/>
       <menu:menuseparator/>
+-->
       <menu:menuitem menu:id=".uno:Crop"/>
     </menu:menupopup>
   </menu:menu>

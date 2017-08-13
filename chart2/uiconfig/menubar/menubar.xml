@@ -26,8 +26,8 @@
             <menu:menuseparator/>
 -->
             <menu:menuitem menu:id=".uno:CloseDoc" menu:label=""/>
-            <menu:menuitem menu:id=".uno:Save" menu:label=""/>
 <!--
+            <menu:menuitem menu:id=".uno:Save" menu:label=""/>
             <menu:menuitem menu:id=".uno:SaveAs" menu:label=""/>
             <menu:menuitem menu:id=".uno:SaveAll" menu:label=""/>
 -->

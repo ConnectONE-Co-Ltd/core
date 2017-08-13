@@ -19,10 +19,12 @@
 <accel:acceleratorlist xmlns:accel="http://openoffice.org/2001/accel" xmlns:xlink="http://www.w3.org/1999/xlink">
     <accel:item accel:code="KEY_Q" accel:mod1="true" xlink:href=".uno:Quit"/>
     <accel:item accel:code="KEY_F4" accel:mod2="true" xlink:href=".uno:Quit"/>
+<!--
     <accel:item accel:code="KEY_N" accel:mod1="true" xlink:href=".uno:NewDoc"/>
     <accel:item accel:code="KEY_O" accel:mod1="true" xlink:href=".uno:Open"/>
     <accel:item accel:code="KEY_OPEN" xlink:href=".uno:Open"/>
     <accel:item accel:code="KEY_P" accel:mod1="true" xlink:href=".uno:Print"/>
+-->
     <accel:item accel:code="KEY_S" accel:mod1="true" xlink:href=".uno:Save"/>
     <accel:item accel:code="KEY_W" accel:mod1="true" xlink:href=".uno:CloseWin"/>
     <accel:item accel:code="KEY_F4" accel:mod1="true" xlink:href=".uno:CloseWin"/>

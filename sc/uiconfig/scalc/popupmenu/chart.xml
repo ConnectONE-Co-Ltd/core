@@ -53,5 +53,7 @@
       <menu:menuitem menu:id=".uno:LeaveGroup"/>
     </menu:menupopup>
   </menu:menu>
+<!--
   <menu:menuitem menu:id=".uno:ExportAsGraphic"/>
+-->
 </menu:menupopup>
