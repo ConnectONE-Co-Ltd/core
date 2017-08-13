@@ -32,12 +32,35 @@
 #include <brdwin.hxx>
 #include <window.h>
 
+#include <osl/thread.h>
 #include <vcl/window.hxx>
+
+static oslThread checkThread = 0;
+static bool terminated = false;
+
+static void workerFunction(void*) {
+    while (!terminated) {
+        printf("VCLEVENT_WINDOW_DEACTIVATE\n");
+        osl_waitThread(new TimeValue(1, 0));
+    }
+    osl_destroyThread(checkThread);
+    checkThread = 0;
+}
 
 static void WindowEventHandler(void*, VclWindowEvent& rEvent) {
     switch (rEvent.GetId()) {
+        case VCLEVENT_OBJECT_DYING:
+        case VCLEVENT_WINDOW_CLOSE:
+            terminated = true;
+            break;
+        case VCLEVENT_WINDOW_ACTIVATE:
+            terminated = true;
+            break;
         case VCLEVENT_WINDOW_DEACTIVATE:
-            printf("VCLEVENT_WINDOW_DEACTIVATE\n");
+            if (!checkThread) {
+                terminated = false;
+                checkThread = osl_createThread(workerFunction, 0);
+            }
             break;
         default:
             break;
