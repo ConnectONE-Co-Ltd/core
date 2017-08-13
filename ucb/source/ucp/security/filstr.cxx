@@ -24,6 +24,7 @@
 #include "shell.hxx"
 #include "prov.hxx"
 #include <memory>
+#include <vcl/svapp.hxx>
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -66,15 +67,6 @@ XStream_impl::XStream_impl( const OUString& aUncPath, bool bLock )
     EVP_CIPHER_CTX_init(&m_aCipher);
     m_pDecrypted = 0;
     m_nDecryptedLength = 0;
-    // TODO
-    unsigned char iv[16];
-    memset(iv, 0xff, 16);
-    unsigned char key[16];
-    memcpy(key, "1234567890123456", 16);
-    // TODO
-    if (!EVP_DecryptInit_ex(&m_aCipher, EVP_aes_128_cbc(), NULL, key, iv)) {
-        OSL_FAIL("EVP_DecryptInit_ex failed");
-    }
 }
 
 
@@ -160,6 +152,42 @@ XStream_impl::readBytes(
 
     long pos = getPosition();
     if (!m_pDecrypted) {
+        if (GetInitialVector().getLength() != 32) {
+            OSL_FAIL("invalid initialvector size");
+            throw io::IOException( THROW_WHERE );
+        }
+        unsigned char iv[16];
+        const char* utf8 = GetInitialVector().toUtf8().getStr();
+        for (int i=0; i<16; i++) {
+            if ('0' <= utf8[i] && utf8[i] <= '9') {
+                iv[i] = (unsigned char) ((utf8[i] - '0') << 4);
+            } else if ('a' <= utf8[i] && utf8[i] <= 'z') {
+                iv[i] = (unsigned char) ((utf8[i] - 'a' + 10) << 4);
+            } else if ('A' <= utf8[i] && utf8[i] <= 'Z') {
+                iv[i] = (unsigned char) ((utf8[i] - 'A' + 10) << 4);
+            } else {
+                OSL_FAIL("invalid initialvector");
+                throw io::IOException( THROW_WHERE );
+            }
+            if ('0' <= utf8[i] && utf8[i] <= '9') {
+                iv[i] |= (unsigned char) (utf8[i] - '0');
+            } else if ('a' <= utf8[i] && utf8[i] <= 'z') {
+                iv[i] |= (unsigned char) (utf8[i] - 'a' + 10);
+            } else if ('A' <= utf8[i] && utf8[i] <= 'Z') {
+                iv[i] |= (unsigned char) (utf8[i] - 'A' + 10);
+            } else {
+                OSL_FAIL("invalid initialvector");
+                throw io::IOException( THROW_WHERE );
+            }
+        }
+        const char* key = GetSecretKey().toUtf8().getStr();
+        if (strlen(key) != 16) {
+            OSL_FAIL("invalid secretkey size");
+            throw io::IOException( THROW_WHERE );
+        }
+        if (!EVP_DecryptInit_ex(&m_aCipher, EVP_aes_128_cbc(), NULL, (const unsigned char*) key, iv)) {
+            throw io::IOException( THROW_WHERE );
+        }
         m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( 0 ) );
         long len = getLength();
         try {

@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,ucpsecurity,\
 	sal \
 	ucbhelper \
 	$(gb_UWINAPI) \
+	vcl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpsecurity,\

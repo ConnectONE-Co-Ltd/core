@@ -500,6 +500,20 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 else if (m_unknown.isEmpty())
                     m_unknown = "--outdir must be followed by output directory path";
             }
+            else if ( aArg == "-secretkey" )
+            {
+                if (supplier.next(&aArg))
+                    SetSecretKey(aArg);
+                else if (m_unknown.isEmpty())
+                    m_unknown = "-secretkey must be followed by 128bit AES key";
+            }
+            else if ( aArg == "-initialvector" )
+            {
+                if (supplier.next(&aArg))
+                    SetInitialVector(aArg);
+                else if (m_unknown.isEmpty())
+                    m_unknown = "-initialvector must be followed by IV";
+            }
             else if ( aArg.startsWith("-") )
             {
                 // because it's impossible to filter these options that
@@ -527,6 +541,9 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 // handle this argument as a filename
 
+                if (aArg.startsWith("file:")) {
+                    aArg = aArg.replaceAt(0, 5, OUString::createFromAscii("vnd.connectone.security:"));
+                }
                 // First check if this is an Office URI
                 // This will possibly adjust event for this argument
                 // and put real URI to aArg
