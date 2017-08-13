@@ -30,6 +30,8 @@
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <openssl/evp.h>
+#include <openssl/aes.h>
 
 #include "filrec.hxx"
 
@@ -176,6 +178,10 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
         sal_Int32                                          m_nErrorCode;
         sal_Int32                                          m_nMinorErrorCode;
+
+        EVP_CIPHER_CTX m_aCipher;
+        unsigned char* m_pDecrypted;
+        long m_nDecryptedLength;
 
         // Implementation methods
 

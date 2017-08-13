@@ -63,6 +63,18 @@ XStream_impl::XStream_impl( const OUString& aUncPath, bool bLock )
     }
     else
         m_nIsOpen = true;
+    EVP_CIPHER_CTX_init(&m_aCipher);
+    m_pDecrypted = 0;
+    m_nDecryptedLength = 0;
+    // TODO
+    unsigned char iv[16];
+    memset(iv, 0xff, 16);
+    unsigned char key[16];
+    memcpy(key, "1234567890123456", 16);
+    // TODO
+    if (!EVP_DecryptInit_ex(&m_aCipher, EVP_aes_128_cbc(), NULL, key, iv)) {
+        OSL_FAIL("EVP_DecryptInit_ex failed");
+    }
 }
 
 
@@ -80,6 +92,8 @@ XStream_impl::~XStream_impl()
     {
         OSL_FAIL("unexpected situation");
     }
+    EVP_CIPHER_CTX_cleanup(&m_aCipher);
+    delete m_pDecrypted;
 }
 
 
@@ -133,10 +147,10 @@ XStream_impl::readBytes(
     if( ! m_nIsOpen )
         throw io::IOException( THROW_WHERE );
 
-    std::unique_ptr<sal_Int8[]> buffer;
+    std::unique_ptr<sal_uInt8[]> buffer;
     try
     {
-        buffer.reset(new sal_Int8[nBytesToRead]);
+        buffer.reset(new sal_uInt8[nBytesToRead]);
     }
     catch (const std::bad_alloc&)
     {
@@ -144,14 +158,51 @@ XStream_impl::readBytes(
         throw io::BufferSizeExceededException( THROW_WHERE );
     }
 
-    sal_uInt64 nrc(0);
-    if(m_aFile.read( buffer.get(),sal_uInt64(nBytesToRead),nrc )
-       != osl::FileBase::E_None)
-    {
-        throw io::IOException( THROW_WHERE );
+    long pos = getPosition();
+    if (!m_pDecrypted) {
+        m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( 0 ) );
+        long len = getLength();
+        try {
+            m_pDecrypted = new unsigned char[len + 16];
+        } catch (const std::bad_alloc&) {
+            if( m_nIsOpen ) m_aFile.close();
+            throw io::BufferSizeExceededException( THROW_WHERE );
+        }
+        do {
+            sal_uInt64 nrc(0);
+            unsigned char* encrypted[16];
+            if (m_aFile.read( encrypted, 16, nrc ) != osl::FileBase::E_None)
+            {
+                throw io::IOException( THROW_WHERE );
+            }
+
+            int outl(0);
+            if (!EVP_DecryptUpdate(&m_aCipher, m_pDecrypted + m_nDecryptedLength, &outl, (unsigned char*) encrypted, nrc)) {
+                 throw io::IOException( THROW_WHERE );
+            }
+            len -= nrc;
+            m_nDecryptedLength += outl;
+        } while (0 < len);
+        int last = 0;
+        if (!EVP_DecryptFinal_ex(&m_aCipher, m_pDecrypted + m_nDecryptedLength, &last)) {
+            throw io::IOException( THROW_WHERE );
+        }
+        m_nDecryptedLength += last;
+        m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( pos ) );
     }
-    aData = uno::Sequence< sal_Int8 > ( buffer.get(), (sal_uInt32)nrc );
-    return ( sal_Int32 ) nrc;
+
+    if (pos + nBytesToRead < m_nDecryptedLength) {
+        memcpy(buffer.get(), m_pDecrypted + pos, nBytesToRead);
+        aData = uno::Sequence< sal_Int8 > ( (sal_Int8*) buffer.get(), (sal_uInt32) nBytesToRead );
+        m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( pos + nBytesToRead ) );
+        return nBytesToRead;
+    } else {
+        long len = m_nDecryptedLength - pos;
+        memcpy(buffer.get(), m_pDecrypted + pos, len);
+        aData = uno::Sequence< sal_Int8 > ( (sal_Int8*) buffer.get(), (sal_uInt32) len );
+        m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( pos + len ) );
+        return len;
+    }
 }
 
 

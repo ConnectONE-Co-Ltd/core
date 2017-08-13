@@ -14,6 +14,11 @@ $(eval $(call gb_Library_set_componentfile,ucpsecurity,ucb/source/ucp/security/u
 
 $(eval $(call gb_Library_use_external,ucpsecurity,boost_headers))
 
+$(eval $(call gb_Library_use_externals,ucpsecurity,\
+	openssl \
+	openssl_headers \
+))
+
 $(eval $(call gb_Library_use_sdk_api,ucpsecurity))
 
 $(eval $(call gb_Library_use_libraries,ucpsecurity,\
