@@ -506,6 +506,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     SetSecretKey(aArg);
                 else if (m_unknown.isEmpty())
                     m_unknown = "-secretkey must be followed by 128bit AES key";
+                bDeprecated = false;
             }
             else if ( aArg == "-initialvector" )
             {
@@ -513,6 +514,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     SetInitialVector(aArg);
                 else if (m_unknown.isEmpty())
                     m_unknown = "-initialvector must be followed by IV";
+                bDeprecated = false;
             }
             else if ( aArg.startsWith("-") )
             {
