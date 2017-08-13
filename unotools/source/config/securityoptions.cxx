@@ -283,6 +283,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
     {
         case PROPERTYHANDLE_SECUREURL:
         {
+/*
             m_seqSecureURLs.realloc( 0 );
             rValue >>= m_seqSecureURLs;
             SvtPathOptions  aOpt;
@@ -290,6 +291,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
             for( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
                 m_seqSecureURLs[ nItem ] = aOpt.SubstituteVariable( m_seqSecureURLs[ nItem ] );
             m_bROSecureURLs = bRO;
+*/
         }
         break;
 
@@ -410,6 +412,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
 
 void SvtSecurityOptions_Impl::LoadAuthors()
 {
+/*
     m_seqTrustedAuthors.realloc( 0 );       // first clear
     Sequence< OUString >    lAuthors = GetNodeNames( PROPERTYNAME_MACRO_TRUSTEDAUTHORS );
     sal_Int32               c1 = lAuthors.getLength();
@@ -456,6 +459,7 @@ void SvtSecurityOptions_Impl::LoadAuthors()
             m_seqTrustedAuthors = comphelper::containerToSequence(v);
         }
     }
+*/
 }
 
 sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
@@ -824,12 +828,14 @@ bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) 
 
 void SvtSecurityOptions_Impl::SetSecureURLs( const Sequence< OUString >& seqURLList )
 {
+/*
     DBG_ASSERT(!m_bROSecureURLs, "SvtSecurityOptions_Impl::SetSecureURLs()\nYou tried to write on a readonly value!\n");
     if (!m_bROSecureURLs && m_seqSecureURLs!=seqURLList)
     {
         m_seqSecureURLs = seqURLList;
         SetModified();
     }
+*/
 }
 
 inline sal_Int32 SvtSecurityOptions_Impl::GetMacroSecurityLevel() const
@@ -862,12 +868,14 @@ void SvtSecurityOptions_Impl::SetMacroSecurityLevel( sal_Int32 _nLevel )
 
 void SvtSecurityOptions_Impl::SetTrustedAuthors( const Sequence< SvtSecurityOptions::Certificate >& rAuthors )
 {
+/*
     DBG_ASSERT(!m_bROTrustedAuthors, "SvtSecurityOptions_Impl::SetTrustedAuthors()\nYou tried to write on a readonly value!\n");
     if( !m_bROTrustedAuthors && rAuthors != m_seqTrustedAuthors )
     {
         m_seqTrustedAuthors = rAuthors;
         SetModified();
     }
+*/
 }
 
 bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOption ) const

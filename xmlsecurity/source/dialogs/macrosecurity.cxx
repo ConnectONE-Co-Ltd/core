@@ -407,8 +407,8 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pPare
     css::uno::Sequence< OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
     mbURLsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_SECUREURLS );
     m_pTrustFileROFI->Show( mbURLsReadonly );
-    m_pTrustFileLocLB->Enable( !mbURLsReadonly );
-    m_pAddLocPB->Enable( !mbURLsReadonly );
+    m_pTrustFileLocLB->Enable( /* !mbURLsReadonly */ false );
+    m_pAddLocPB->Enable( /* !mbURLsReadonly */ false );
 
     sal_Int32 nEntryCnt = aSecureURLs.getLength();
     for( sal_Int32 i = 0 ; i < nEntryCnt ; ++i )
