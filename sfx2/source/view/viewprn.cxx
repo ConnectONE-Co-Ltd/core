@@ -631,6 +631,7 @@ Printer* SfxViewShell::GetActivePrinter() const
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
+/*
     sal_uInt16              nDialogRet = RET_CANCEL;
     VclPtr<SfxPrinter>      pPrinter;
     bool                    bSilent = false;
@@ -873,6 +874,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             }
         }
     }
+*/
 }
 
 SfxPrinter* SfxViewShell::GetPrinter( bool /*bCreate*/ )
