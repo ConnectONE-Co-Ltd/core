@@ -41,7 +41,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL basctl_component_getFactory( const sal_Char*
     // Set default return value for this operation - if it failed.
     void* pReturn = nullptr ;
 
-/*
     if  (
             ( pImplementationName   !=  nullptr ) &&
             ( pServiceManager       !=  nullptr )
@@ -66,7 +65,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL basctl_component_getFactory( const sal_Char*
             pReturn = xFactory.get();
         }
     }
-*/
 
     // Return with result of this operation.
     return pReturn ;

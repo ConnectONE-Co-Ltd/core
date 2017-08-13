@@ -171,7 +171,6 @@ void SFTreeListBox::Init( const OUString& language  )
 
     try
     {
-/*
         Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get(xCtx);
 
         rootNode.set( xFac->createView(
@@ -181,7 +180,6 @@ void SFTreeListBox::Init( const OUString& language  )
         {
             children = rootNode->getChildNodes();
         }
-*/
     }
     catch( Exception& e )
     {

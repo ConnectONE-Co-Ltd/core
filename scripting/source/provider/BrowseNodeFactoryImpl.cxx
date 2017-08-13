@@ -293,6 +293,9 @@ namespace
 
 std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference< XComponentContext >& xCtx )
 {
+    std::vector< Reference < browse::XBrowseNode > > result(0);
+    return result;
+/*
     Sequence< OUString > openDocs =
         MiscUtils::allOpenTDocUrls( xCtx );
 
@@ -352,6 +355,7 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
         locnBNs_Return[j] = locnBNs[j];
 
     return locnBNs_Return;
+*/
 }
 
 } // namespace

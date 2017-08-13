@@ -1390,6 +1390,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 #if HAVE_FEATURE_SCRIPTING
         case SID_BASICIDE_APPEAR:
         {
+/*
             SfxViewFrame* pView = lcl_getBasicIDEViewFrame( nullptr );
             if ( !pView )
             {
@@ -1446,8 +1447,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
 
             rReq.Done();
+*/
         }
-        break;
+       break;
 
         case SID_BASICCHOOSER:
         {
