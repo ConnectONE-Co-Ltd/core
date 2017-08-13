@@ -97,6 +97,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
     throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException, std::exception)
 {
+/*
     OStringBuffer aBuffer, aLaunchBuffer;
 
     // DESKTOP_LAUNCH, see http://freedesktop.org/pipermail/xdg/2004-August/004489.html
@@ -207,6 +208,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     int nerr = errno;
     throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
         static_cast < XSystemShellExecute * > (this), nerr );
+*/
 }
 
 // XServiceInfo
