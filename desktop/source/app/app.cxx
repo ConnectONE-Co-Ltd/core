@@ -149,6 +149,8 @@
 #define GETPID getpid
 #endif
 
+#include <vcl/svapp.hxx>
+
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -632,6 +634,9 @@ void Desktop::Init()
             RequestHandler::Disable();
         }
         pSignalHandler = osl_addSignalHandler(SalMainPipeExchangeSignal_impl, nullptr);
+    }
+    if (!rCmdLine.WantsToLoadDocument() || !GetSecretKey().getLength() || !GetInitialVector().getLength()) {
+        SetBootstrapStatus(BS_TERMINATE);
     }
 }
 
