@@ -539,8 +539,10 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         comphelper::getProcessComponentContext() );
     try
     {
+/*
         Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get( xCtx );
         rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+*/
     }
     catch( Exception& e )
     {
