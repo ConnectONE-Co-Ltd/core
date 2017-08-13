@@ -87,6 +87,11 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(vcl::Window* pParent, const SfxIt
 
     UpdateLastCheckedText();
     UpdateUserAgent();
+
+    m_pAutoCheckCheckBox->Enable(false);
+    m_pCheckNowButton->Enable(false);
+    m_pAutoDownloadCheckBox->Enable(false);
+    m_pChangePathButton->Enable(false);
 }
 
 SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
@@ -281,7 +286,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
     bool bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
 
     m_pAutoCheckCheckBox->Check(bValue);
-    m_pAutoCheckCheckBox->Enable(!bReadOnly);
+    // m_pAutoCheckCheckBox->Enable(!bReadOnly);
 
     sal_Int64 nValue = 0;
     m_xUpdateAccess->getByName( "CheckInterval" ) >>= nValue;
@@ -307,7 +312,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
     aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoDownloadEnabled");
     bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
     m_pAutoDownloadCheckBox->Check(bValue);
-    m_pAutoDownloadCheckBox->Enable(!bReadOnly);
+    // m_pAutoDownloadCheckBox->Enable(!bReadOnly);
     m_pDestPathLabel->Enable();
     m_pDestPath->Enable();
 
@@ -315,7 +320,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
     m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
     aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/DownloadDestination");
     bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
-    m_pChangePathButton->Enable(!bReadOnly);
+    // m_pChangePathButton->Enable(!bReadOnly);
 
     if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sValue, aPath) )
         m_pDestPath->SetText(aPath);
