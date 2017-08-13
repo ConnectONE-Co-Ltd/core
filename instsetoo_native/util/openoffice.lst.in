@@ -256,6 +256,7 @@ LibreOfficeDoCAN
             OOODOWNLOADNAME 1
             CHANGETARGETDIR 1
             PATCHCODEFILE ooodocan_patchcodes.txt
+            CODEFILENAME codes_ooodev.txt
             LOCALUSERDIR $ORIGIN/..
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
