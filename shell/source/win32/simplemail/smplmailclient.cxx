@@ -250,6 +250,7 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
     const Reference<XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag)
     throw (IllegalArgumentException, Exception, RuntimeException)
 {
+/*
     validateParameter(xSimpleMailMessage, aFlag);
 
     std::vector<OUString> senddocParams;
@@ -259,6 +260,7 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
         throw Exception(
             "Send email failed",
             static_cast<XSimpleMailClient*>(this));
+*/
 }
 
 void CSmplMailClient::validateParameter(

@@ -130,6 +130,7 @@ void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
 void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 /*aFlag*/ )
     throw (IllegalArgumentException, Exception, RuntimeException, std::exception)
 {
+/*
     if ( ! xSimpleMailMessage.is() )
     {
         throw css::lang::IllegalArgumentException( "No message specified" ,
@@ -284,6 +285,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         throw css::uno::Exception("No mail client configured",
             static_cast < XSimpleMailClient * > (this) );
     }
+*/
 }
 
 // XServiceInfo
