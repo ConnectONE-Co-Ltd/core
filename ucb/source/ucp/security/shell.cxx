@@ -69,11 +69,6 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
-static OUString securityToFileScheme(const OUString &securityURL)
-{
-    return securityURL.replaceFirst("vnd.connectone.security:", "file:");
-}
-
 
 shell::UnqPathData::UnqPathData()
     : properties( nullptr ),
@@ -1919,9 +1914,14 @@ bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
         return false;
     }
 
-    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( securityToFileScheme(Url),Unq );
+    if (Url.startsWith("vnd.connectone.security")) {
+        Unq = Url.replaceFirst("vnd.connectone.security", "file");
+    } else {
+        Unq = Url;
+    }
 
-    Unq = Url;
+    OUString systemPath;
+    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,systemPath );
 
     sal_Int32 l = Unq.getLength()-1;
     if( ! err && Unq.endsWith("/") &&
@@ -1934,9 +1934,14 @@ bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
 
 bool SAL_CALL shell::getUrlFromUnq( const OUString& Unq,OUString& Url )
 {
-    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( securityToFileScheme(Unq),Url );
+    OUString systemPath;
+    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,systemPath );
 
-    Url = Unq;
+    if (Unq.startsWith("file")) {
+        Url = Unq.replaceFirst("file", "vnd.connectone.security");
+    } else {
+        Url = Unq;
+    }
 
     return err;
 }
@@ -2977,7 +2982,7 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 void SAL_CALL
 shell::getScheme( OUString& Scheme )
 {
-  Scheme = "file";
+  Scheme = "vnd.connectone.security";
 }
 
 OUString SAL_CALL
@@ -2990,7 +2995,7 @@ shell::getImplementationName_static()
 uno::Sequence< OUString > SAL_CALL
 shell::getSupportedServiceNames_static()
 {
-  OUString Supported("com.sun.star.ucb.FileContentProvider");
+  OUString Supported("com.sun.star.ucb.SecurityContentProvider");
   css::uno::Sequence< OUString > Seq( &Supported,1 );
   return Seq;
 }
