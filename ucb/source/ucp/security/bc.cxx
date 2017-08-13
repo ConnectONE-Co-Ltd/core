@@ -308,6 +308,9 @@ BaseContent::execute( const Command& aCommand,
            CommandAbortedException,
            RuntimeException, std::exception )
 {
+    OSL_TRACE("command=%s path=%s\n", ::rtl::OUStringToOString (aCommand.Name, RTL_TEXTENCODING_UTF8).getStr(),
+        ::rtl::OUStringToOString (m_aUncPath, RTL_TEXTENCODING_UTF8).getStr());
+
     if( ! CommandId )
         // A Command with commandid zero cannot be aborted
         CommandId = createCommandIdentifier();

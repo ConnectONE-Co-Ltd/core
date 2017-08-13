@@ -23,6 +23,7 @@ $(eval $(call gb_Module_add_targets,ucb,\
 	Library_ucpimage \
 	Library_ucppkg1 \
 	Library_ucptdoc1 \
+	Library_ucpsecurity \
 ))
 
 ifeq ($(ENABLE_GIO),TRUE)
