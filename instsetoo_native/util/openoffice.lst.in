@@ -221,16 +221,16 @@ LibreOfficeDev_SDK
     }
 }
 
-LibreOfficeDoCAN
+DoCANOffice
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME LibreOffice DoCAN
+            PRODUCTNAME DoCAN Office
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            WINDOWSBASISROOTNAME LibreOffice DoCAN @LIBO_VERSION_MAJOR@
+            WINDOWSBASISROOTNAME DoCAN Office @LIBO_VERSION_MAJOR@
             UNIXBASISROOTNAME libreofficedocan@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             POSTVERSIONEXTENSION
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
@@ -267,21 +267,21 @@ LibreOfficeDoCAN
         active          1
         compression     5
         script          setup_osl
-        downloadname    LibreOfficeDoCAN_{productversion}_{os}_install_{languages}
-        langpackdownloadname    LibreOfficeDoCAN_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    LibreOfficeDoCAN_{productversion}_helppack_{os}_install_{languages}
+        downloadname    DoCANOffice_{productversion}_{os}_install_{languages}
+        langpackdownloadname    DoCANOffice_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    DoCANOffice_{productversion}_helppack_{os}_install_{languages}
         include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{extensionsdir},{licensepath},{packinfopath}
     }
 }
 
-LibreOfficeDoCAN_SDK
+DoCANOffice_SDK
 {
     Settings
     {
-        downloadname LibreOfficeDoCAN-SDK_{packageversion}_{os}_install_{languages}
+        downloadname DoCANOffice-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibreOfficeDoCAN
+            PRODUCTNAME DoCAN Office
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             WINDOWSBASISROOTNAME LibreOfficeDev @LIBO_VERSION_MAJOR@
