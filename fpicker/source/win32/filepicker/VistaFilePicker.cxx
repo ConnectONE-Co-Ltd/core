@@ -260,8 +260,6 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
 
 void VistaFilePicker::ensureInit()
 {
-    return ExecutableDialogResults::CANCEL;
-/*
     bool bInitialized(false);
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -280,6 +278,8 @@ void VistaFilePicker::ensureInit()
 ::sal_Int16 SAL_CALL VistaFilePicker::execute()
     throw(css::uno::RuntimeException)
 {
+    return ExecutableDialogResults::CANCEL;
+/*
     ensureInit();
 
     RequestRef rRequest(new Request());
