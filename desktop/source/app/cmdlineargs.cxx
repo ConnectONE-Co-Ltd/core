@@ -201,6 +201,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
     m_cwdUrl = supplier.getCwdUrl();
     CommandLineEvent eCurrentEvent = CommandLineEvent::Open;
 
+    bool hasSecretKey = false;
+    bool hasIV = false;
     for (;;)
     {
         OUString aArg;
@@ -502,17 +504,19 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( aArg == "-secretkey" )
             {
-                if (supplier.next(&aArg))
+                if (supplier.next(&aArg)) {
                     SetSecretKey(aArg);
-                else if (m_unknown.isEmpty())
+                    hasSecretKey = true;
+                } else if (m_unknown.isEmpty())
                     m_unknown = "-secretkey must be followed by 128bit AES key";
                 bDeprecated = false;
             }
             else if ( aArg == "-initialvector" )
             {
-                if (supplier.next(&aArg))
+                if (supplier.next(&aArg)) {
                     SetInitialVector(aArg);
-                else if (m_unknown.isEmpty())
+                    hasIV = true;
+                } else if (m_unknown.isEmpty())
                     m_unknown = "-initialvector must be followed by IV";
                 bDeprecated = false;
             }
@@ -594,6 +598,25 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", sArg.getStr(), sArg.getStr());
             }
         }
+    }
+    if (!hasSecretKey || !hasIV) {
+        m_openlist.clear();
+        m_viewlist.clear();
+        m_startlist.clear();
+        m_printlist.clear();
+        m_printtolist.clear();
+        m_forcenewlist.clear();
+        m_forceopenlist.clear();
+        m_conversionlist.clear();
+        m_bDocumentArgs = false;
+        m_writer = false;
+        m_calc = false;
+        m_draw = false;
+        m_impress = false;
+        m_base = false;
+        m_global = false;
+        m_math = false;
+        m_web = false;
     }
 }
 
