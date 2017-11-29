@@ -327,6 +327,7 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
         const OUString& sPassword, const boost::optional<OUString>& sThumbnail)
 {
+/*
     uno::Reference<container::XNameAccess> xListAccess(GetListAccess(eHistory));
     if (!xListAccess.is())
         return;
@@ -451,6 +452,7 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
     {
         SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
+*/
 }
 
 void SvtHistoryOptions_Impl::DeleteItem(EHistoryType eHistory, const OUString& sURL)
