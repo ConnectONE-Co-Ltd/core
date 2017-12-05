@@ -36,30 +36,39 @@
 #include <vcl/window.hxx>
 
 static oslThread checkThread = 0;
-static bool terminated = false;
+static bool activated = false;
 
 static void workerFunction(void*) {
-    while (!terminated) {
-        printf("VCLEVENT_WINDOW_DEACTIVATE\n");
-        osl_waitThread(new TimeValue(1, 0));
+    for (;;) {
+        TimeValue waitTime(0, 300000000);
+        osl_waitThread(&waitTime);
+        if (!activated) {
+            fprintf(stderr, "thread erase clipboard\n");
+            if ( OpenClipboard(NULL) ) {
+                EmptyClipboard();
+                CloseClipboard();
+            }
+        }
+        fprintf(stderr, "thread suspended\n");
+        osl_suspendThread(checkThread);
+        fprintf(stderr, "thread resumed\n");
     }
-    osl_destroyThread(checkThread);
-    checkThread = 0;
 }
 
 static void WindowEventHandler(void*, VclWindowEvent& rEvent) {
     switch (rEvent.GetId()) {
         case VCLEVENT_OBJECT_DYING:
         case VCLEVENT_WINDOW_CLOSE:
-            terminated = true;
             break;
         case VCLEVENT_WINDOW_ACTIVATE:
-            terminated = true;
+            activated = true;
             break;
         case VCLEVENT_WINDOW_DEACTIVATE:
             if (!checkThread) {
-                terminated = false;
+                activated = false;
                 checkThread = osl_createThread(workerFunction, 0);
+            } else {
+                osl_resumeThread(checkThread);
             }
             break;
         default:
