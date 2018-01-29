@@ -49,4 +49,12 @@ $(eval $(call gb_Library_add_exception_objects,ucpsecurity,\
 	ucb/source/ucp/security/shell \
 ))
 
+$(eval $(call gb_Library_add_cxxflags,ucpsecurity,\
+	$(KEYCRYPTO_CFLAGS) \
+))
+
+$(eval $(call gb_Library_add_libs,ucpsecurity,\
+	$(KEYCRYPTO_LIBS) \
+))
+
 # vim: set noet sw=4 ts=4:

@@ -25,6 +25,7 @@
 #include "prov.hxx"
 #include <memory>
 #include <vcl/svapp.hxx>
+#include <docan_key_crypto.h>
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -155,42 +156,57 @@ XStream_impl::readBytes(
 
     sal_Int64 pos = getPosition();
     if (!m_pDecrypted) {
-        if (GetInitialVector().getLength() != 32) {
-            OSL_FAIL("invalid initialvector size");
-            throw io::IOException( THROW_WHERE );
-        }
-        unsigned char iv[16];
-        const char* utf8 = GetInitialVector().toUtf8().getStr();
-        for (int i=0; i<16; i++) {
-            if ('0' <= *utf8 && *utf8 <= '9') {
-                iv[i] = (unsigned char) ((*utf8 - '0') << 4);
-            } else if ('a' <= *utf8 && *utf8 <= 'z') {
-                iv[i] = (unsigned char) ((*utf8 - 'a' + 10) << 4);
-            } else if ('A' <= *utf8 && *utf8 <= 'Z') {
-                iv[i] = (unsigned char) ((*utf8 - 'A' + 10) << 4);
-            } else {
-                OSL_FAIL("invalid initialvector");
-                throw io::IOException( THROW_WHERE );
-            }
-            utf8++;
-            if ('0' <= *utf8 && *utf8 <= '9') {
-                iv[i] |= (unsigned char) (*utf8 - '0');
-            } else if ('a' <= *utf8 && *utf8 <= 'z') {
-                iv[i] |= (unsigned char) (*utf8 - 'a' + 10);
-            } else if ('A' <= *utf8 && *utf8 <= 'Z') {
-                iv[i] |= (unsigned char) (*utf8 - 'A' + 10);
-            } else {
-                OSL_FAIL("invalid initialvector");
-                throw io::IOException( THROW_WHERE );
-            }
-            utf8++;
-        }
-        const char* key = GetSecretKey().toUtf8().getStr();
-        if (strlen(key) != 16) {
+        if (GetSecretKey().getLength() != 64) {
             OSL_FAIL("invalid secretkey size");
             throw io::IOException( THROW_WHERE );
         }
-        if (!EVP_DecryptInit_ex(&m_aCipher, EVP_aes_128_cbc(), NULL, (const unsigned char*) key, iv)) {
+        if (GetInitialVector().getLength() != 64) {
+            OSL_FAIL("invalid initialvector size");
+            throw io::IOException( THROW_WHERE );
+        }
+        const char* hex_string[2];
+        hex_string[0] = GetSecretKey().toUtf8().getStr();
+        hex_string[1] = GetInitialVector().toUtf8().getStr();
+        unsigned char raw[2][32];
+        for (int j=0; j<2; j++) {
+            const unsigned char* hex;
+            if (j == 0) {
+                hex = (const unsigned char*) GetSecretKey().toUtf8().getStr();
+            } else {
+                hex = (const unsigned char*) GetInitialVector().toUtf8().getStr();
+            }
+            for (int i=0; i<sizeof(raw[j]); i++) {
+                if ('0' <= *hex && *hex <= '9') {
+                    raw[j][i] = (*hex - '0') << 4;
+                } else if ('a' <= *hex && *hex <= 'z') {
+                    raw[j][i] = (*hex - 'a' + 10) << 4;
+                } else if ('A' <= *hex && *hex <= 'Z') {
+                    raw[j][i] = (*hex - 'A' + 10) << 4;
+                } else {
+                    throw io::IOException( THROW_WHERE );
+                }
+                hex++;
+                if ('0' <= *hex && *hex <= '9') {
+                    raw[j][i] |= *hex - '0';
+                } else if ('a' <= *hex && *hex <= 'z') {
+                    raw[j][i] |= *hex - 'a' + 10;
+                } else if ('A' <= *hex && *hex <= 'Z') {
+                    raw[j][i] |= *hex - 'A' + 10;
+                } else {
+                    throw io::IOException( THROW_WHERE );
+                }
+                hex++;
+            }
+        }
+        char decrypted_key[32];
+        char decrypted_iv[32];
+        if (docan_key_decrypt((const char*) raw[0], sizeof(raw[0]), decrypted_key, sizeof(decrypted_key), 8944) != 16) {
+            throw io::IOException( THROW_WHERE );
+        }
+        if (docan_key_decrypt((const char*) raw[1], sizeof(raw[1]), decrypted_iv, sizeof(decrypted_iv), 8944) != 16) {
+            throw io::IOException( THROW_WHERE );
+        }
+        if (!EVP_DecryptInit_ex(&m_aCipher, EVP_aes_128_cbc(), NULL, (const unsigned char*) decrypted_key, (const unsigned char*) decrypted_iv)) {
             throw io::IOException( THROW_WHERE );
         }
         m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( 0 ) );

@@ -203,6 +203,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
     bool hasSecretKey = false;
     bool hasIV = false;
+    bool hasPath = false;
     for (;;)
     {
         OUString aArg;
@@ -549,6 +550,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
                 if (aArg.startsWith("file:")) {
                     aArg = aArg.replaceAt(0, 5, OUString::createFromAscii("vnd.connectone.security:"));
+                    hasPath = true;
                 }
                 // First check if this is an Office URI
                 // This will possibly adjust event for this argument
@@ -599,7 +601,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
         }
     }
-    if (!hasSecretKey || !hasIV) {
+    if (!hasSecretKey || !hasIV || !hasPath) {
         m_openlist.clear();
         m_viewlist.clear();
         m_startlist.clear();

@@ -2385,6 +2385,13 @@ AC_ARG_WITH(system-icu-for-build,
     AS_HELP_STRING([--with-system-icu-for-build=yes/no/force],
         [Use icu already on system for build tools (cross-compilation only).]))
 
+dnl ===================================================================
+dnl for DoCAN Office
+dnl ===================================================================
+
+AC_ARG_WITH(key-crypto-path,
+    AS_HELP_STRING([--with-key-crypto-path=<path for KeyCrypto project>],
+        [Set path for KeyCrypto project.]))
 
 dnl ===================================================================
 dnl check for required programs (grep, awk, sed, bash)
@@ -5349,7 +5356,11 @@ find_msms()
 
 find_msvc_x64_dlls()
 {
-    msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
+    if test "$RTL_ARCH" = "x86"; then
+       msvcdllpath="$VC_PRODUCT_DIR/redist/x86/Microsoft.VC${VCVER}.CRT"
+    else
+       msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
+    fi
     # http://blogs.msdn.com/b/vcblog/archive/2014/06/03/visual-studio-14-ctp.aspx
     # Refactored C Runtime (CRT): This CTP contains the first preview of the substantially refactored CRT.
     # msvcr140.dll no longer exists. It is replaced by a trio of DLLs: vcruntime140.dll, appcrt140.dll,
@@ -12866,6 +12877,20 @@ else
 fi
 
 AC_SUBST(LO_PATH)
+
+# for DoCAN Office
+if test "$with_key_crypto_path"; then
+    ENABLE_KEYCRYPTO=TRUE
+    AC_SUBST(ENABLE_KEYCRYPTO)
+    KEYCRYPTO_CFLAGS="/I$with_key_crypto_path/KeyCrypto"
+    AC_SUBST(KEYCRYPTO_CFLAGS)
+    KEYCRYPTO_LIBS="/LIBPATH:$with_key_crypto_path/Release KeyCrypto.lib"
+    AC_SUBST(KEYCRYPTO_LIBS)
+    KEYCRYPTO_DLL_PATH="$with_key_crypto_path/Release"
+    AC_SUBST(KEYCRYPTO_DLL_PATH)
+    KEYCRYPTO_DLLS="KeyCrypto.dll"
+    AC_SUBST(KEYCRYPTO_DLLS)
+fi
 
 # Generate a configuration md5 we can use for deps
 if test -f config_host.mk; then
