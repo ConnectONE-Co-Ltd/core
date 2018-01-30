@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma comment( lib, "psapi.lib" )
 
 #include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -25,6 +26,9 @@
 #include "prov.hxx"
 #include <memory>
 #include <vcl/svapp.hxx>
+#include <windows.h>
+#include <tchar.h>
+#include <psapi.h>
 #include <docan_key_crypto.h>
 
 using namespace fileaccess;
@@ -156,6 +160,42 @@ XStream_impl::readBytes(
 
     sal_Int64 pos = getPosition();
     if (!m_pDecrypted) {
+        // Get the list of process identifiers.
+        DWORD aProcesses[1024], cbNeeded, cProcesses;
+        unsigned int i;
+        if ( !EnumProcesses( aProcesses, sizeof(aProcesses), &cbNeeded ) ) {
+            throw io::IOException( THROW_WHERE );
+        }
+
+        // Calculate how many process identifiers were returned.
+        cProcesses = cbNeeded / sizeof(DWORD);
+
+        DWORD processId = 0;
+        for ( i = 0; i < cProcesses; i++ ) {
+            if( aProcesses[i] != 0 ) {
+                TCHAR szProcessName[MAX_PATH] = TEXT("<unknown>");
+                // Get a handle to the process.
+                HANDLE hProcess = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, aProcesses[i]);
+                // Get the process name.
+                if (NULL != hProcess ) {
+                    HMODULE hMod;
+                    DWORD cbNeeded;
+                    if ( EnumProcessModulesEx( hProcess, &hMod, sizeof(hMod), &cbNeeded, LIST_MODULES_ALL) ) {
+                        GetModuleBaseName( hProcess, hMod, szProcessName, sizeof(szProcessName)/sizeof(TCHAR) );
+                        if (!_tcscmp(szProcessName, TEXT("DoCAN.Browser.exe"))) {
+                            processId = aProcesses[i];
+                        }
+                    }
+                    CloseHandle(hProcess);
+                }
+            }
+        }
+
+        if (processId == 0) {
+            OSL_FAIL("Not Found DoCAN.Browser.exe");
+            throw io::IOException( THROW_WHERE );
+        }
+
         if (GetSecretKey().getLength() != 64) {
             OSL_FAIL("invalid secretkey size");
             throw io::IOException( THROW_WHERE );
@@ -200,10 +240,10 @@ XStream_impl::readBytes(
         }
         char decrypted_key[32];
         char decrypted_iv[32];
-        if (docan_key_decrypt((const char*) raw[0], sizeof(raw[0]), decrypted_key, sizeof(decrypted_key), 8944) != 16) {
+        if (docan_key_decrypt((const char*) raw[0], sizeof(raw[0]), decrypted_key, sizeof(decrypted_key), processId) != 16) {
             throw io::IOException( THROW_WHERE );
         }
-        if (docan_key_decrypt((const char*) raw[1], sizeof(raw[1]), decrypted_iv, sizeof(decrypted_iv), 8944) != 16) {
+        if (docan_key_decrypt((const char*) raw[1], sizeof(raw[1]), decrypted_iv, sizeof(decrypted_iv), processId) != 16) {
             throw io::IOException( THROW_WHERE );
         }
         if (!EVP_DecryptInit_ex(&m_aCipher, EVP_aes_128_cbc(), NULL, (const unsigned char*) decrypted_key, (const unsigned char*) decrypted_iv)) {
