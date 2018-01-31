@@ -118,4 +118,10 @@ $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/ooo,\
 ))
 endif
 
+ifeq ($(ENABLE_KEYCRYPTO),TRUE)
+$(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
+    scp2/source/ooo/module_keycrypto \
+))
+endif
+
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

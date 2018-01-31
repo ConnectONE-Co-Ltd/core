@@ -1008,4 +1008,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, gbuildselfte
 $(eval $(call gb_Helper_register_executables,NONE, gbuildselftestexe))
 endif
 
+ifneq ($(ENABLE_KEYCRYPTO),)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,keycrypto, \
+	keycrypto \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
