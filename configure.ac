@@ -12881,14 +12881,19 @@ AC_SUBST(LO_PATH)
 # for DoCAN Office
 if test "$with_key_crypto_path"; then
     ENABLE_KEYCRYPTO=TRUE
-    AC_SUBST(ENABLE_KEYCRYPTO)
     KEYCRYPTO_CFLAGS="/I$with_key_crypto_path/KeyCrypto"
-    AC_SUBST(KEYCRYPTO_CFLAGS)
-    KEYCRYPTO_LIBS="/LIBPATH:$with_key_crypto_path/Release KeyCrypto.lib"
-    AC_SUBST(KEYCRYPTO_LIBS)
-    KEYCRYPTO_DLL_PATH="$with_key_crypto_path/Release"
-    AC_SUBST(KEYCRYPTO_DLL_PATH)
+    if test "$RTL_ARCH" = "x86"; then
+        KEYCRYPTO_LIBS="/LIBPATH:$with_key_crypto_path/Release KeyCrypto.lib"
+        KEYCRYPTO_DLL_PATH="$with_key_crypto_path/Release"
+    else
+        KEYCRYPTO_LIBS="/LIBPATH:$with_key_crypto_path/x64/Release KeyCrypto.lib"
+        KEYCRYPTO_DLL_PATH="$with_key_crypto_path/x64/Release"
+    fi
     KEYCRYPTO_DLLS="KeyCrypto.dll"
+    AC_SUBST(ENABLE_KEYCRYPTO)
+    AC_SUBST(KEYCRYPTO_CFLAGS)
+    AC_SUBST(KEYCRYPTO_LIBS)
+    AC_SUBST(KEYCRYPTO_DLL_PATH)
     AC_SUBST(KEYCRYPTO_DLLS)
 fi
 
