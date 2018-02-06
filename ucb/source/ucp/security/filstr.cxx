@@ -182,7 +182,7 @@ XStream_impl::readBytes(
                     DWORD cbNeeded;
                     if ( EnumProcessModulesEx( hProcess, &hMod, sizeof(hMod), &cbNeeded, LIST_MODULES_ALL) ) {
                         GetModuleBaseName( hProcess, hMod, szProcessName, sizeof(szProcessName)/sizeof(TCHAR) );
-                        if (!_tcscmp(szProcessName, TEXT("DoCAN.Browser.exe"))) {
+                        if (!_tcscmp(szProcessName, TEXT("DoCAN.Browser.exe")) || !_tcscmp(szProcessName, TEXT("DOCAN.Browser.exe"))) {
                             processId = aProcesses[i];
                         }
                     }
