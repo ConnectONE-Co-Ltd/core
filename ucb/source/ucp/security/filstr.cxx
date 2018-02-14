@@ -162,7 +162,6 @@ XStream_impl::readBytes(
     if (!m_pDecrypted) {
         // Get the list of process identifiers.
         DWORD aProcesses[1024], cbNeeded, cProcesses;
-        unsigned int i;
         if ( !EnumProcesses( aProcesses, sizeof(aProcesses), &cbNeeded ) ) {
             throw io::IOException( THROW_WHERE );
         }
@@ -171,6 +170,7 @@ XStream_impl::readBytes(
         cProcesses = cbNeeded / sizeof(DWORD);
 
         DWORD processId = 0;
+        unsigned int i;
         for ( i = 0; i < cProcesses; i++ ) {
             if( aProcesses[i] != 0 ) {
                 TCHAR szProcessName[MAX_PATH] = TEXT("<unknown>");
@@ -342,42 +342,94 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     if(length)
     {
         if (!m_pEncrypted) {
-            if (GetInitialVector().getLength() != 32) {
-                OSL_FAIL("invalid initialvector size");
+            // Get the list of process identifiers.
+            DWORD aProcesses[1024], cbNeeded, cProcesses;
+            if ( !EnumProcesses( aProcesses, sizeof(aProcesses), &cbNeeded ) ) {
                 throw io::IOException( THROW_WHERE );
             }
-            unsigned char iv[16];
-            const char* utf8 = GetInitialVector().toUtf8().getStr();
-            for (int i=0; i<16; i++) {
-                if ('0' <= *utf8 && *utf8 <= '9') {
-                    iv[i] = (unsigned char) ((*utf8 - '0') << 4);
-                } else if ('a' <= *utf8 && *utf8 <= 'z') {
-                    iv[i] = (unsigned char) ((*utf8 - 'a' + 10) << 4);
-                } else if ('A' <= *utf8 && *utf8 <= 'Z') {
-                    iv[i] = (unsigned char) ((*utf8 - 'A' + 10) << 4);
-                } else {
-                    OSL_FAIL("invalid initialvector");
-                    throw io::IOException( THROW_WHERE );
+
+            // Calculate how many process identifiers were returned.
+            cProcesses = cbNeeded / sizeof(DWORD);
+
+            DWORD processId = 0;
+            unsigned int i;
+            for ( i = 0; i < cProcesses; i++ ) {
+                if( aProcesses[i] != 0 ) {
+                    TCHAR szProcessName[MAX_PATH] = TEXT("<unknown>");
+                    // Get a handle to the process.
+                    HANDLE hProcess = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, aProcesses[i]);
+                    // Get the process name.
+                    if (NULL != hProcess ) {
+                        HMODULE hMod;
+                        DWORD cbNeeded;
+                        if ( EnumProcessModulesEx( hProcess, &hMod, sizeof(hMod), &cbNeeded, LIST_MODULES_ALL) ) {
+                            GetModuleBaseName( hProcess, hMod, szProcessName, sizeof(szProcessName)/sizeof(TCHAR) );
+                            if (!_tcscmp(szProcessName, TEXT("DoCAN.Browser.exe")) || !_tcscmp(szProcessName, TEXT("DOCAN.Browser.exe"))) {
+                                processId = aProcesses[i];
+                            }
+                        }
+                        CloseHandle(hProcess);
+                    }
                 }
-                utf8++;
-                if ('0' <= *utf8 && *utf8 <= '9') {
-                    iv[i] |= (unsigned char) (*utf8 - '0');
-                } else if ('a' <= *utf8 && *utf8 <= 'z') {
-                    iv[i] |= (unsigned char) (*utf8 - 'a' + 10);
-                } else if ('A' <= *utf8 && *utf8 <= 'Z') {
-                    iv[i] |= (unsigned char) (*utf8 - 'A' + 10);
-                } else {
-                    OSL_FAIL("invalid initialvector");
-                    throw io::IOException( THROW_WHERE );
-                }
-                utf8++;
             }
-            const char* key = GetSecretKey().toUtf8().getStr();
-            if (strlen(key) != 16) {
+
+            if (processId == 0) {
+                OSL_FAIL("Not Found DoCAN.Browser.exe");
+                throw io::IOException( THROW_WHERE );
+            }
+
+            if (GetSecretKey().getLength() != 64) {
                 OSL_FAIL("invalid secretkey size");
                 throw io::IOException( THROW_WHERE );
             }
-            if (!EVP_EncryptInit_ex(&m_aCipher, EVP_aes_128_cbc(), NULL, (const unsigned char*) key, iv)) {
+            if (GetInitialVector().getLength() != 64) {
+                OSL_FAIL("invalid initialvector size");
+                throw io::IOException( THROW_WHERE );
+            }
+            const char* hex_string[2];
+            hex_string[0] = GetSecretKey().toUtf8().getStr();
+            hex_string[1] = GetInitialVector().toUtf8().getStr();
+            unsigned char raw[2][32];
+            for (int j=0; j<2; j++) {
+                const unsigned char* hex;
+                if (j == 0) {
+                    hex = (const unsigned char*) GetSecretKey().toUtf8().getStr();
+                } else {
+                    hex = (const unsigned char*) GetInitialVector().toUtf8().getStr();
+                }
+                for (int i=0; i<sizeof(raw[j]); i++) {
+                    if ('0' <= *hex && *hex <= '9') {
+                        raw[j][i] = (*hex - '0') << 4;
+                    } else if ('a' <= *hex && *hex <= 'z') {
+                        raw[j][i] = (*hex - 'a' + 10) << 4;
+                    } else if ('A' <= *hex && *hex <= 'Z') {
+                        raw[j][i] = (*hex - 'A' + 10) << 4;
+                    } else {
+                        throw io::IOException( THROW_WHERE );
+                    }
+                    hex++;
+                    if ('0' <= *hex && *hex <= '9') {
+                        raw[j][i] |= *hex - '0';
+                    } else if ('a' <= *hex && *hex <= 'z') {
+                        raw[j][i] |= *hex - 'a' + 10;
+                    } else if ('A' <= *hex && *hex <= 'Z') {
+                        raw[j][i] |= *hex - 'A' + 10;
+                    } else {
+                        throw io::IOException( THROW_WHERE );
+                    }
+                    hex++;
+                }
+            }
+            char decrypted_key[32];
+            char decrypted_iv[32];
+            if (docan_key_decrypt((const char*) raw[0], sizeof(raw[0]), decrypted_key, sizeof(decrypted_key), processId) != 16) {
+                throw io::IOException( THROW_WHERE );
+            }
+            if (docan_key_decrypt((const char*) raw[1], sizeof(raw[1]), decrypted_iv, sizeof(decrypted_iv), processId) != 16) {
+                throw io::IOException( THROW_WHERE );
+            }
+            m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( 0 ) );
+            if (!EVP_EncryptInit_ex(&m_aCipher, EVP_aes_128_cbc(), NULL, (const unsigned char*) decrypted_key, (const unsigned char*) decrypted_iv)) {
                 throw io::IOException( THROW_WHERE );
             }
             m_pEncrypted = new std::vector<unsigned char>();
