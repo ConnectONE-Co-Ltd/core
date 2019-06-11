@@ -38,11 +38,11 @@ sub create_upgrade_table
     installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");
 
     # Setting all products, that must be removed.
-    my $newline = $installer::globals::upgradecode . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "513" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
+    my $newline = $installer::globals::upgradecode . "\t" . "4.0.0.0" . "\t" . "5.3.6.1" . "\t" . "\t" . "513" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
     push(@upgradetable, $newline);
 
     # preventing downgrading
-    $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
+    $newline = $installer::globals::upgradecode . "\t" . "3.1.0.0" . "\t" . "3.9.9.9" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
     push(@upgradetable, $newline);
 
     # Saving the file
